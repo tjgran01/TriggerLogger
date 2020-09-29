@@ -71,6 +71,8 @@ namespace TriggerLogger
 
         private void submitButton_MouseClick(object sender, MouseEventArgs e)
         {
+            hardwareTrig.SetPulseLength(pulseLen);
+
             // If you're in manual mode and click button return to normal form.
             if (inManual)
             {

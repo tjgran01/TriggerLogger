@@ -9,6 +9,7 @@ namespace TriggerLogger
     public class PortAccess
     {
         private int _address;
+        private int pulseTime;
         bool waitPulse = false;
         [DllImport("inpout32.dll", EntryPoint = "Out32")]
         public static extern void Output(int address, int value);
@@ -18,6 +19,11 @@ namespace TriggerLogger
 
         //Will need a start and stop action on the pulse, I'd start it, run the other triggers and tehn stop it, but thats just me. 
 
+        public void SetPulseLength(int pulseLen)
+        {
+            this.pulseTime = pulseLen;
+        }
+
         public void StartPulse(int address, int triggerVal)
         {
             if (!waitPulse)
@@ -26,7 +32,7 @@ namespace TriggerLogger
                 waitPulse = true;
                 this._address = address;
                 Timer trigWait = new Timer();
-                trigWait.Interval = 5;
+                trigWait.Interval = pulseTime;
                 trigWait.AutoReset = false;
                 trigWait.Elapsed += new ElapsedEventHandler(TimerElapsed);
                 trigWait.Start();
