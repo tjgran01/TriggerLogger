@@ -1,0 +1,10 @@
+C:\Users\13154\source\repos\TriggerLogger\bin\Debug\TriggerLogger.exe.config
+C:\Users\13154\source\repos\TriggerLogger\bin\Debug\TriggerLogger.exe
+C:\Users\13154\source\repos\TriggerLogger\bin\Debug\TriggerLogger.pdb
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.csprojAssemblyReference.cache
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.Form1.resources
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.Properties.Resources.resources
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.csproj.GenerateResource.cache
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.csproj.CoreCompileInputs.cache
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.exe
+C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.pdb
