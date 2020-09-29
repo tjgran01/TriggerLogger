@@ -9,10 +9,20 @@ namespace TriggerLogger
     public class PortAccess
     {
         private int _address;
-        private int pulseTime;
+        private int lastTriggerVal = 0;
+        private Timer trigWait = new Timer();
+        private int pulseTime = 5;
+
         bool waitPulse = false;
         [DllImport("inpout32.dll", EntryPoint = "Out32")]
         public static extern void Output(int address, int value);
+
+        public PortAccess()
+        {
+            trigWait.Interval = pulseTime;
+            trigWait.AutoReset = false;
+            trigWait.Elapsed += new ElapsedEventHandler(TimerElapsed);
+        }
 
         //'address' needs to be the address of the port IN DECIMAL - Note windows may well feed it to you in Hex, so will need to be converted before being coded up
         // The (first) address (in a range) of LPT1 in hex is 0x00003FF8 = 16376 in decimal
@@ -22,20 +32,23 @@ namespace TriggerLogger
         public void SetPulseLength(int pulseLen)
         {
             this.pulseTime = pulseLen;
+            trigWait.Interval = pulseTime;
         }
 
         public void StartPulse(int address, int triggerVal)
         {
-            if (!waitPulse)
+            if (!waitPulse || (triggerVal == 12 && lastTriggerVal == 7))
             {
-                Output(address, triggerVal);
                 waitPulse = true;
+                this.lastTriggerVal = triggerVal;
+                Output(address, 255);
                 this._address = address;
-                Timer trigWait = new Timer();
-                trigWait.Interval = pulseTime;
-                trigWait.AutoReset = false;
-                trigWait.Elapsed += new ElapsedEventHandler(TimerElapsed);
                 trigWait.Start();
+                Console.WriteLine(waitPulse);
+            }
+            else
+            {
+                Console.WriteLine("Trig Wait Active -- mark not sent");
             }
         }
 
@@ -46,6 +59,7 @@ namespace TriggerLogger
 
         void TimerElapsed(object sender, ElapsedEventArgs e)
         {
+            trigWait.Stop();
             ResetPulse(_address);
             waitPulse = false;
         }
