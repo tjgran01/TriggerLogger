@@ -8,3 +8,13 @@ C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.csproj.Generat
 C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.csproj.CoreCompileInputs.cache
 C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.exe
 C:\Users\13154\source\repos\TriggerLogger\obj\Debug\TriggerLogger.pdb
+C:\Users\shine\Documents\GitHub\TriggerLogger\bin\Debug\TriggerLogger.exe.config
+C:\Users\shine\Documents\GitHub\TriggerLogger\bin\Debug\TriggerLogger.exe
+C:\Users\shine\Documents\GitHub\TriggerLogger\bin\Debug\TriggerLogger.pdb
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.csprojAssemblyReference.cache
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.Form1.resources
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.Properties.Resources.resources
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.csproj.GenerateResource.cache
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.csproj.CoreCompileInputs.cache
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.exe
+C:\Users\shine\Documents\GitHub\TriggerLogger\obj\Debug\TriggerLogger.pdb

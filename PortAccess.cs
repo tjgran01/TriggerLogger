@@ -44,7 +44,6 @@ namespace TriggerLogger
                 Output(address, 255);
                 this._address = address;
                 trigWait.Start();
-                Console.WriteLine(waitPulse);
             }
             else
             {

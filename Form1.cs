@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace TriggerLogger
@@ -31,16 +25,27 @@ namespace TriggerLogger
 
         private bool useLSL;
         private bool manualTrigger;
+        private bool useTimer;
         private bool inManual = false;
 
         private int[] startMark = { 1 };
         private int[] endMark = { 10 };
         private int[] middleMark = { 5 };
 
+
+        // Different pausing methods.
+        private System.Timers.Timer betweenPulseTimer = new System.Timers.Timer();
+        private bool canFire = true;
+
+        private bool useStopWatch;
+
+
+
         public Form1()
         {
             InitializeComponent();
             SetFormDefaults();
+            SetTimerParams();
         }
 
         private void SetFormDefaults()
@@ -64,14 +69,45 @@ namespace TriggerLogger
             this.decAddr = int.Parse(hexAddr, System.Globalization.NumberStyles.HexNumber);
         }
 
+        private void SetTimerParams()
+        {
+            betweenPulseTimer.Interval = timeBetweenPulses + pulseLen;
+            betweenPulseTimer.AutoReset = false;
+            betweenPulseTimer.Elapsed += new ElapsedEventHandler(TimerElapsed);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
+        private void PauseMethod()
+        {
+            if (!useTimer)
+            {
+                Thread.Sleep(timeBetweenPulses + pulseLen);
+            }
+            else if (useTimer && !useStopWatch)
+            {
+                betweenPulseTimer.Start();
+                canFire = false;
+                while (!canFire)
+                {
+                    continue;
+                }
+                Console.WriteLine("Broke!");
+            }
+            else
+            {
+
+            }
+        }
+
+
         private void submitButton_MouseClick(object sender, MouseEventArgs e)
         {
             hardwareTrig.SetPulseLength(pulseLen);
+            SetTimerParams();
 
             // If you're in manual mode and click button return to normal form.
             if (inManual)
@@ -96,12 +132,13 @@ namespace TriggerLogger
             {
                 FlipWindow(true);
                 FireEvent(startMark);
+                Thread.Sleep(timeBetweenPulses + pulseLen);
 
                 for (int i = 0; i <= numPulses; i++)
                 {
                     // Jostle these around to change order.
                     FireEvent(middleMark);
-                    Thread.Sleep(timeBetweenPulses);
+                    PauseMethod();
                 }
 
                 FireEvent(endMark);
@@ -119,16 +156,24 @@ namespace TriggerLogger
             theLogger.Info("Mark: " + eventMark[0].ToString() + " sent!");
         }
 
-
         private void manualCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             this.manualTrigger = !this.manualTrigger;
-            Console.WriteLine(manualTrigger);
         }
 
         private void lslCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.useLSL = !this.useLSL;
+        }
+
+        private void useTimerCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            this.useTimer = !this.useTimer;
+        }
+
+        private void stopWatchCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            this.useStopWatch = !this.useStopWatch;
         }
 
         private void FlipToManualWindow(bool running)
@@ -157,7 +202,7 @@ namespace TriggerLogger
         {
             if (running)
             {
-                totalRunTime = pulseLen * numPulses * timeBetweenPulses;
+                totalRunTime = (pulseLen + timeBetweenPulses) * numPulses;
 
                 this.insturctionsLabel.Text = "The Program is now running. Based on your parameters it should take " + totalRunTime.ToString() + "ms (" + (totalRunTime / 1000).ToString() + "s) to complete.";
                 this.insturctionsLabel.Update();
@@ -170,6 +215,8 @@ namespace TriggerLogger
                 this.pulseLabel.Hide();
                 this.numPulsesLabel.Hide();
                 this.timeBetweenLabel.Hide();
+                this.useTimerCheck.Hide();
+                this.stopWatchCheck.Hide();
             }
             else
             {
@@ -185,6 +232,8 @@ namespace TriggerLogger
                 this.pulseLabel.Show();
                 this.numPulsesLabel.Show();
                 this.timeBetweenLabel.Show();
+                this.useTimerCheck.Show();
+                this.stopWatchCheck.Show();
             }
         }
 
@@ -212,6 +261,13 @@ namespace TriggerLogger
             {
                 FireEvent(middleMark);
             }
+        }
+
+        // Timer methods
+        void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            betweenPulseTimer.Stop();
+            canFire = true;
         }
     }
 }
