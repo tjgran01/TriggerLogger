@@ -40,12 +40,14 @@
             this.manualCheckBox = new System.Windows.Forms.CheckBox();
             this.useTimerCheck = new System.Windows.Forms.CheckBox();
             this.stopWatchCheck = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.fileNameLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // submitButton
             // 
             this.submitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.submitButton.Location = new System.Drawing.Point(339, 380);
+            this.submitButton.Location = new System.Drawing.Point(339, 481);
             this.submitButton.Name = "submitButton";
             this.submitButton.Size = new System.Drawing.Size(153, 52);
             this.submitButton.TabIndex = 0;
@@ -158,12 +160,31 @@
             this.stopWatchCheck.UseVisualStyleBackColor = true;
             this.stopWatchCheck.CheckedChanged += new System.EventHandler(this.stopWatchCheck_CheckedChanged);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(179, 437);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(273, 20);
+            this.textBox1.TabIndex = 14;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // fileNameLabel
+            // 
+            this.fileNameLabel.CausesValidation = false;
+            this.fileNameLabel.Location = new System.Drawing.Point(39, 437);
+            this.fileNameLabel.Name = "fileNameLabel";
+            this.fileNameLabel.Size = new System.Drawing.Size(99, 28);
+            this.fileNameLabel.TabIndex = 13;
+            this.fileNameLabel.Text = "Log File Name";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(503, 449);
+            this.ClientSize = new System.Drawing.Size(503, 550);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.fileNameLabel);
             this.Controls.Add(this.stopWatchCheck);
             this.Controls.Add(this.useTimerCheck);
             this.Controls.Add(this.manualCheckBox);
@@ -199,6 +220,8 @@
         private System.Windows.Forms.CheckBox manualCheckBox;
         private System.Windows.Forms.CheckBox useTimerCheck;
         private System.Windows.Forms.CheckBox stopWatchCheck;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label fileNameLabel;
     }
 }
 

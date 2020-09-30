@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
+using System.Diagnostics;
 using System.Timers;
+using System.IO;
 using System.Windows.Forms;
 
 namespace TriggerLogger
@@ -26,19 +28,21 @@ namespace TriggerLogger
         private bool useLSL;
         private bool manualTrigger;
         private bool useTimer;
+        private bool useStopWatch;
         private bool inManual = false;
 
         private int[] startMark = { 1 };
         private int[] endMark = { 10 };
         private int[] middleMark = { 5 };
 
+        private string logFname;
+        private string[] dirFiles;
+
 
         // Different pausing methods.
         private System.Timers.Timer betweenPulseTimer = new System.Timers.Timer();
+        private Stopwatch bewteenPulseStopwatch = new Stopwatch();
         private bool canFire = true;
-
-        private bool useStopWatch;
-
 
 
         public Form1()
@@ -50,9 +54,6 @@ namespace TriggerLogger
 
         private void SetFormDefaults()
         {
-            logFilePath = @".\Logs\" + DateTime.Now.ToString(datetimeFormat) + ".txt";
-            theLogger = new SimpleLogger(logFilePath);
-
             this.pulseLen = 5;
             this.numPulses = 1000;
             this.timeBetweenPulses = 10;
@@ -83,7 +84,7 @@ namespace TriggerLogger
 
         private void PauseMethod()
         {
-            if (!useTimer)
+            if (!useTimer && !useStopWatch)
             {
                 Thread.Sleep(timeBetweenPulses + pulseLen);
             }
@@ -99,13 +100,31 @@ namespace TriggerLogger
             }
             else
             {
-
+                bewteenPulseStopwatch.Start();
+                while (bewteenPulseStopwatch.Elapsed.Milliseconds < timeBetweenPulses + pulseLen)
+                {
+                    continue;
+                }
+                Console.WriteLine(bewteenPulseStopwatch.Elapsed.Milliseconds.ToString());
+                bewteenPulseStopwatch.Stop();
+                bewteenPulseStopwatch.Reset();
+                Console.WriteLine("Broke");
             }
         }
 
 
         private void submitButton_MouseClick(object sender, MouseEventArgs e)
         {
+            if (logFname == null)
+            {
+                logFilePath = @".\Logs\" + DateTime.Now.ToString(datetimeFormat) + ".txt";
+            }
+            else
+            {
+                logFilePath = @".\Logs\" + logFname + DateTime.Now.ToString(datetimeFormat) + ".txt";
+            }
+
+            theLogger = new SimpleLogger(logFilePath);
             hardwareTrig.SetPulseLength(pulseLen);
             SetTimerParams();
 
@@ -159,6 +178,14 @@ namespace TriggerLogger
         private void manualCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             this.manualTrigger = !this.manualTrigger;
+            if (this.manualTrigger)
+            {
+                this.numPulseEntey.Enabled = false;
+            }
+            else
+            {
+                this.numPulseEntey.Enabled = true;
+            }
         }
 
         private void lslCheck_CheckedChanged(object sender, EventArgs e)
@@ -169,11 +196,15 @@ namespace TriggerLogger
         private void useTimerCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.useTimer = !this.useTimer;
+            this.useStopWatch = false;
+            stopWatchCheck.Checked = false;
         }
 
         private void stopWatchCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.useStopWatch = !this.useStopWatch;
+            this.useTimer = false;
+            useTimerCheck.Checked = false;
         }
 
         private void FlipToManualWindow(bool running)
@@ -217,6 +248,9 @@ namespace TriggerLogger
                 this.timeBetweenLabel.Hide();
                 this.useTimerCheck.Hide();
                 this.stopWatchCheck.Hide();
+                this.textBox1.Hide();
+                this.textBox1.Text = "";
+                this.fileNameLabel.Hide();
             }
             else
             {
@@ -234,6 +268,8 @@ namespace TriggerLogger
                 this.timeBetweenLabel.Show();
                 this.useTimerCheck.Show();
                 this.stopWatchCheck.Show();
+                this.textBox1.Show();
+                this.fileNameLabel.Show();
             }
         }
 
@@ -268,6 +304,11 @@ namespace TriggerLogger
         {
             betweenPulseTimer.Stop();
             canFire = true;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            this.logFname = textBox1.Text;
         }
     }
 }
